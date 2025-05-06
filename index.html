@@ -282,7 +282,7 @@ function logResultsToGoogleSheet() {
     winner: Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0]
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbyfGcKjCOK81jPaa0TKJTsD1HA5F3P59Q0zpSXVLTOKnIsu-Oblxe5Bu6tnVwO-CpSKLw/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwnfDd3FE6lsuULnsFGRzw9h8k3NmrRtSDs-z9vGdRjSEJnhma-dTKYDoe8ni3vK1QVBA/exec", {
     method: "POST",
     body: JSON.stringify(payload),
     headers: { 'Content-Type': 'application/json' }
