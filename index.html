@@ -199,9 +199,9 @@
       }
     ];
 
-    const supabase = supabase.createClient(
+    const supabaseClient = window.supabase.createClient(
       "https://nygchaujottukyblncgu.supabase.co",
-      "your-anon-key-goes-here"
+   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2NoYXVqb3R0dWt5YmxuY2d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTY0NjYsImV4cCI6MjA2MjYzMjQ2Nn0.baKzk7DBS7ffRbuEddaRTnT_W54F_IPeXzeQrM71ixk"
     );
 
     let currentQuestion = 0;
@@ -270,7 +270,7 @@
         winner: winner
       };
 
-      const { data, error } = await supabase.from('quiz_results').insert([payload]);
+      const { data, error } = await supabaseClient.from('quiz_results').insert([payload]);
       if (error) {
         console.error('Supabase Error:', error);
       } else {
