@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Find Your Perfect Tag Brand</title>
   <style>
     :root {
@@ -10,7 +10,6 @@
       --brand-blue: #171c8f;
       --light-grey: #f0f0f0;
     }
-
     body {
       font-family: Arial, sans-serif;
       background: var(--brand-yellow);
@@ -18,21 +17,17 @@
       padding: 0;
       color: var(--brand-blue);
     }
-
     .container {
       max-width: 1000px;
       margin: auto;
       padding: 20px;
     }
-
     .start-screen, .question, .result {
       display: none;
     }
-
     .active {
       display: block;
     }
-
     .start-screen {
       display: flex;
       flex-direction: column;
@@ -41,13 +36,11 @@
       height: 100vh;
       text-align: center;
     }
-
     .start-screen img {
       width: 300px;
       height: auto;
       margin-bottom: 20px;
     }
-
     .start-screen button {
       background: var(--brand-blue);
       color: white;
@@ -59,22 +52,18 @@
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       transition: transform 0.2s ease;
     }
-
     .start-screen button:hover {
       transform: scale(1.05);
     }
-
     .question {
       text-align: center;
       padding: 40px 20px;
     }
-
     .question h2 {
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 20px;
     }
-
     .question-card {
       background: white;
       border-radius: 20px;
@@ -83,7 +72,6 @@
       max-width: 700px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
     .question button {
       display: block;
       width: 100%;
@@ -95,35 +83,28 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     .result {
       padding: 20px;
     }
-
     .result-layout {
       display: flex;
       flex-direction: column;
     }
-
     @media(min-width: 768px) {
       .result-layout {
         flex-direction: row;
         gap: 20px;
       }
     }
-
     .brand-results {
       flex: 1;
     }
-
     .form-container {
       flex: 1;
     }
-
     .brand-highlight {
       border: 3px solid var(--brand-blue);
     }
-
     .brand {
       background: white;
       padding: 10px;
@@ -132,13 +113,11 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-
     .brand img {
       width: 100px;
       height: auto;
       margin-bottom: 10px;
     }
-
     .brand button {
       background: var(--brand-blue);
       color: white;
@@ -177,41 +156,58 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    const SUPABASE_URL = 'https://nygchaujottukyblncgu.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2NoYXVqb3R0dWt5YmxuY2d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTY0NjYsImV4cCI6MjA2MjYzMjQ2Nn0.baKzk7DBS7ffRbuEddaRTnT_W54F_IPeXzeQrM71ixk';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
     const questions = [
-      { text: "How much does the applicator matter to you?", answers: [
-        { brand: "Rubba", text: "I'm not so fussy about the applicator, a standard manual pair of pliers are fine." },
-        { brand: "TagFaster", text: "I love trying new things and new technology, having an automatic applicator would be a great benefit to me." },
-        { brand: "Z Tags", text: "I'm looking for a stress free, tear prevention applicator." }
-      ] },
-      { text: "Does the size of your sheep tags matter to you?", answers: [
-        { brand: "Rubba", text: "Yes! I like to have shape options (button, flag, loop) and a nice large print area." },
-        { brand: "TagFaster", text: "I prefer more discreet tags, which are small and lightweight." },
-        { brand: "Z Tags", text: "I like a more traditional loop shaped tag, they have always worked for me!" }
-      ] },
-      { text: "When do you normally tag your lambs?", answers: [
-        { brand: "Rubba", text: "I tag my breeding ewes after fly season, with my breeding pairs." },
-        { brand: "TagFaster", text: "I like to quickly tag all my animals before they go to market, and normally all at once!" },
-        { brand: "Z Tags", text: "I like to tag my new arrivals from birth!" }
-      ] },
-      { text: "How important is the speed at which you tag?", answers: [
-        { brand: "Rubba", text: "I only have a few ears to tag." },
-        { brand: "TagFaster", text: "Very Important! I have a large flock to tag and need to get the job done quick." },
-        { brand: "Z Tags", text: "Somewhat Important." }
-      ] },
-      { text: "What benefit would be most valuable to you?", answers: [
-        { brand: "Rubba", text: "A Large colour range" },
-        { brand: "TagFaster", text: "Pre organised strips of pairs with yellow and coloured twin tags on a strip together." },
-        { brand: "Z Tags", text: "Competitive Pricing" }
-      ] }
+      {
+        text: "How much does the applicator matter to you?",
+        answers: [
+          { brand: "Rubba", text: "I'm not so fussy about the applicator, a standard manual pair of pliers are fine." },
+          { brand: "TagFaster", text: "I love trying new things and new technology, having an automatic applicator would be a great benefit to me." },
+          { brand: "Z Tags", text: "I'm looking for a stress free, tear prevention applicator." }
+        ]
+      },
+      {
+        text: "Does the size of your sheep tags matter to you?",
+        answers: [
+          { brand: "Rubba", text: "Yes! I like to have shape options (button, flag, loop) and a nice large print area." },
+          { brand: "TagFaster", text: "I prefer more discreet tags, which are small and lightweight." },
+          { brand: "Z Tags", text: "I like a more traditional loop shaped tag, they have always worked for me!" }
+        ]
+      },
+      {
+        text: "When do you normally tag your lambs?",
+        answers: [
+          { brand: "Rubba", text: "I tag my breeding ewes after fly season, with my breeding pairs." },
+          { brand: "TagFaster", text: "I like to quickly tag all my animals before they go to market, and normally all at once!" },
+          { brand: "Z Tags", text: "I like to tag my new arrivals from birth!" }
+        ]
+      },
+      {
+        text: "How important is the speed at which you tag?",
+        answers: [
+          { brand: "Rubba", text: "I only have a few ears to tag." },
+          { brand: "TagFaster", text: "Very Important! I have a large flock to tag and need to get the job done quick." },
+          { brand: "Z Tags", text: "Somewhat Important." }
+        ]
+      },
+      {
+        text: "What benefit would be most valuable to you?",
+        answers: [
+          { brand: "Rubba", text: "A Large colour range" },
+          { brand: "TagFaster", text: "Pre organised strips of pairs with yellow and coloured twin tags on a strip together." },
+          { brand: "Z Tags", text: "Competitive Pricing" }
+        ]
+      }
     ];
+
+    const supabase = supabase.createClient(
+      "https://nygchaujottukyblncgu.supabase.co",
+      "your-anon-key-goes-here"
+    );
 
     let currentQuestion = 0;
     const scores = { Rubba: 0, TagFaster: 0, 'Z Tags': 0 };
     const answersSelected = [];
+
     const quizContainer = document.getElementById('quiz-container');
 
     function startQuiz() {
@@ -242,7 +238,7 @@
       }
     }
 
-    async function finishQuiz() {
+    function finishQuiz() {
       document.getElementById('quiz-container').innerHTML = '';
       document.getElementById('result').classList.add('active');
 
@@ -260,22 +256,25 @@
       `).join('');
 
       document.getElementById('brand-results').innerHTML = resultHTML;
-      await logResultsToSupabase(winner);
+      logResultsToSupabase(winner);
     }
 
     async function logResultsToSupabase(winner) {
       const payload = {
         timestamp: new Date().toISOString(),
-        answers: answersSelected.slice(0, 5),
+        answer1: answersSelected[0],
+        answer2: answersSelected[1],
+        answer3: answersSelected[2],
+        answer4: answersSelected[3],
+        answer5: answersSelected[4],
         winner: winner
       };
 
-      const { data, error } = await supabase.from('Quiz Results').insert([payload]);
-
+      const { data, error } = await supabase.from('quiz_results').insert([payload]);
       if (error) {
-        console.error('Supabase insert error:', error);
+        console.error('Supabase Error:', error);
       } else {
-        console.log('Data logged to Supabase:', data);
+        console.log('Logged to Supabase:', data);
       }
     }
 
