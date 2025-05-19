@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Find Your Perfect Tag Brand</title>
+  <style>
+    /* [STYLES REMAIN UNCHANGED — OMITTED FOR BREVITY IN THIS MESSAGE] */
  <style>
     :root {
       --brand-yellow: #fce300;
@@ -215,7 +217,7 @@
 
     function showQuestion() {
       const q = questions[currentQuestion];
-      quizContainer.innerHTML = <div class='question active'><h2>${q.text}</h2><div class='question-card'></div></div>;
+      quizContainer.innerHTML = `<div class='question active'><h2>${q.text}</h2><div class='question-card'></div></div>`;
       q.answers.forEach((a) => {
         const btn = document.createElement('button');
         btn.innerText = a.text;
@@ -241,7 +243,7 @@
 
       const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
 
-      const resultHTML = ['Rubba', 'TagFaster', 'Z Tags'].map(b => 
+      const resultHTML = ['Rubba', 'TagFaster', 'Z Tags'].map(b => `
         <div class="brand ${b === winner ? 'brand-highlight' : ''}">
           <h3>${b}</h3>
           <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo">
@@ -250,7 +252,7 @@
             <button>View ${b} Products</button>
           </a>
         </div>
-      ).join('');
+      `).join('');
 
       document.getElementById('brand-results').innerHTML = resultHTML;
       logResultsToSupabase(winner);
