@@ -459,7 +459,7 @@
     </div>
   </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     const questions = [
       {
@@ -504,32 +504,49 @@
       }
     ];
 
-    const supabaseClient = window.supabase.createClient(
-      "https://nygchaujottukyblncgu.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2NoYXVqb3R0dWt5YmxuY2d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTY0NjYsImV4cCI6MjA2MjYzMjQ2Nn0.baKzk7DBS7ffRbuEddaRTnT_W54F_IPeXzeQrM71ixk"
-    );
-
     let currentQuestion = 0;
     const scores = { Rubba: 0, TagFaster: 0, 'Z Tags': 0 };
     const answersSelected = [];
+
+    let supabaseClient;
+
     const quizContainer = document.getElementById('quiz-container');
 
+    function updateProgressBar() {
+      const progressBar = document.querySelector('.progress-bar');
+      if (progressBar) {
+        const percent = ((currentQuestion) / questions.length) * 100;
+        progressBar.style.width = percent + '%';
+      }
+    }
+
     function startQuiz() {
-      document.getElementById('start-screen').classList.remove('active');
+      document.getElementById('start-screen').style.display = 'none';
       quizContainer.classList.add('active');
       showQuestion();
     }
 
     function showQuestion() {
       const q = questions[currentQuestion];
-      quizContainer.innerHTML = `<div class='question active'><h2>${q.text}</h2><div class='question-card'></div></div>`;
-      const card = quizContainer.querySelector('.question-card');
+
+      quizContainer.innerHTML = `
+        <div class="progress-bar-container" aria-label="Quiz progress bar">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${currentQuestion}"></div>
+        </div>
+        <div class='question active'>
+          <div class="question-text">${q.text}</div>
+          <div class='question-card answers'></div>
+        </div>
+      `;
+
       q.answers.forEach((a) => {
         const btn = document.createElement('button');
         btn.innerText = a.text;
         btn.onclick = () => selectAnswer(a.brand, a.text);
-        card.appendChild(btn);
+        quizContainer.querySelector('.answers').appendChild(btn);
       });
+
+      updateProgressBar();
     }
 
     function selectAnswer(brand, answerText) {
@@ -544,7 +561,7 @@
     }
 
     function finishQuiz() {
-      quizContainer.classList.remove('active');
+        quizContainer.classList.remove('active');
       document.getElementById('result').classList.add('active');
 
       const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
@@ -552,9 +569,8 @@
       const resultHTML = ['Rubba', 'TagFaster', 'Z Tags'].map(b => `
         <div class="brand ${b === winner ? 'brand-highlight' : ''}">
           <h3>${b}</h3>
-          <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo">
-          <br>
-          <a href="https://yourwebsite.com/${b.toLowerCase()}" target="_blank">
+          <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo" />
+          <a href="https://yourwebsite.com/${b.toLowerCase()}" target="_blank" rel="noopener noreferrer">
             <button>View ${b} Products</button>
           </a>
         </div>
@@ -583,12 +599,19 @@
       }
     }
 
+    // ✅ Ensure Supabase is created after DOM and scripts load
     document.addEventListener("DOMContentLoaded", () => {
+      supabaseClient = window.supabase.createClient(
+        "https://nygchaujottukyblncgu.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2NoYXVqb3R0dWt5YmxuY2d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTY0NjYsImV4cCI6MjA2MjYzMjQ2Nn0.baKzk7DBS7ffRbuEddaRTnT_W54F_IPeXzeQrM71ixk"
+      );
+
       document.getElementById("start-button").addEventListener("click", startQuiz);
     });
   </script>
 </body>
 </html>
+
 
 
 
