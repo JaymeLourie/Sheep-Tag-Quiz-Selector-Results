@@ -2,138 +2,443 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Find Your Perfect Tag Brand</title>
   <style>
     :root {
       --brand-yellow: #fce300;
       --brand-blue: #171c8f;
-      --light-grey: #f0f0f0;
+      --light-grey: #f8f9fa;
+      --medium-grey: #b0b5c1;
+      --dark-blue: #0f1266;
+      --transition-speed: 0.3s;
+      --border-radius: 12px;
+      --shadow-light: 0 4px 8px rgba(23, 28, 143, 0.1);
+      --shadow-strong: 0 10px 25px rgba(23, 28, 143, 0.2);
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    body {
-      font-family: Arial, sans-serif;
-      background: var(--brand-yellow);
-      margin: 0;
-      padding: 0;
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0; padding: 0;
+      font-family: var(--font-family);
       color: var(--brand-blue);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+      background: var(--light-grey);
     }
+
     .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
-    .start-screen, .question, .result {
-      display: none;
-    }
-    .active {
-      display: block;
-    }
-    .start-screen {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Start Screen with full viewport background image */
+.start-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  padding: 0 20px;
+
+  background: url('assets/background.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+  /* Ensure start screen covers everything */
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1000;
+}
+
+.start-screen::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.start-screen > * {
+  position: relative;
+  z-index: 2;
+}
+
+.start-screen img {
+  width: 280px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-strong);
+  transition: transform var(--transition-speed);
+  margin-bottom: 32px;
+}
+
+.start-screen img:hover {
+  transform: scale(1.06);
+}
+
+.start-screen h1 {
+  font-size: 3.8rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+  color: white;
+  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+}
+
+.start-screen p {
+  font-size: 2rem;
+  font-weight: 600;
+  max-width: 530px;
+  margin-bottom: 36px;
+  color: white;
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
+
+.start-screen button {
+  background-color: var(--brand-blue);
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 18px 48px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(23, 28, 143, 0.35);
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.start-screen button:hover,
+.start-screen button:focus {
+  background-color: var(--dark-blue);
+  outline: none;
+  transform: scale(1.07);
+}
+
+/* Hide start screen when inactive */
+.start-screen.hidden {
+  display: none;
+}
+
+/* ===== Mobile styles for smaller screens ===== */
+@media (max-width: 600px) {
+  .start-screen h1 {
+    font-size: 5rem; /* Bigger font size on mobile */
+    line-height: 1.2;
+    padding: 0 10px;
+  }
+
+  .start-screen p {
+    font-size: 2.5rem; /* Bigger paragraph text */
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .start-screen button {
+    font-size: 2.3rem;
+    padding: 20px 40px;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .start-screen img {
+    width: 200px;
+  }
+}
+
+
+    /* Quiz container */
+    #quiz-container {
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      min-height: calc(100vh - 100px);
+      padding: 60px 24px 40px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
     }
-    .start-screen img {
-      width: 300px;
-      height: auto;
-      margin-bottom: 20px;
+
+    #quiz-container.active {
+      display: flex;
     }
-    .start-screen button {
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--light-grey);
+      border-radius: var(--border-radius);
+      height: 14px;
+      overflow: hidden;
+      margin-bottom: 36px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
       background: var(--brand-blue);
-      color: white;
-      font-weight: bold;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: var(--border-radius);
     }
-    .start-screen button:hover {
-      transform: scale(1.05);
-    }
+
+    /* Question card */
     .question {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .question h2 {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .question-card {
       background: white;
-      border-radius: 20px;
-      padding: 20px;
-      margin: auto;
-      max-width: 700px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 36px 36px 40px;
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+      user-select: none;
     }
+
+    /* Question text */
+    .question-text {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--brand-blue);
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Answers container */
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+    }
+
+    /* Answer buttons */
     .question button {
+      background: var(--light-grey);
+      border: 2.5px solid transparent;
+      border-radius: var(--border-radius);
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-light);
+      transition: 
+        background-color var(--transition-speed),
+        border-color var(--transition-speed),
+        box-shadow var(--transition-speed),
+        transform var(--transition-speed);
+      text-align: left;
+      color: var(--dark-blue);
       display: block;
       width: 100%;
-      background: var(--light-grey);
-      border: none;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
+      min-height: 56px;
     }
-    .result {
-      padding: 20px;
+
+    /* Remove default focus outline and add custom focus */
+    .question button:focus-visible {
+      outline: 3px solid var(--brand-yellow);
+      outline-offset: 3px;
     }
+
+    /* Hover and focus states */
+    .question button:hover {
+      background: #fffbe6;
+      border-color: var(--brand-yellow);
+      box-shadow: 0 6px 18px rgba(252, 227, 0, 0.4);
+      transform: scale(1.03);
+    }
+
+    /* Selected answer style */
+    .question button.selected {
+      background: var(--brand-yellow);
+      border-color: var(--dark-blue);
+      color: var(--dark-blue);
+      box-shadow: 0 8px 25px rgba(23, 28, 143, 0.35);
+      cursor: default;
+      transform: none;
+    }
+
+    /* Disable pointer events on selected */
+    .question button.selected:hover {
+      background: var(--brand-yellow);
+      border-color: var(--dark-blue);
+      box-shadow: 0 8px 25px rgba(23, 28, 143, 0.35);
+      transform: none;
+      cursor: default;
+    }
+
+    /* Results */
+.result {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px 20px;
+  max-width: 900px;
+  margin: 0 auto; /* Center horizontally */
+  position: relative;
+  top: 0;
+}
+
+
+
+    .result.active {
+      display: flex;
+    }
+
+    .result h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 36px;
+      color: var(--brand-blue);
+      letter-spacing: 1.1px;
+    }
+
+    /* Layout for result brands and form */
     .result-layout {
       display: flex;
       flex-direction: column;
+      gap: 36px;
     }
+
     @media(min-width: 768px) {
       .result-layout {
         flex-direction: row;
-        gap: 20px;
       }
     }
+
     .brand-results {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
     }
-    .form-container {
-      flex: 1;
-    }
-    .brand-highlight {
-      border: 3px solid var(--brand-blue);
-    }
+
     .brand {
       background: white;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 26px 22px 32px;
       text-align: center;
+      transition: box-shadow var(--transition-speed);
+      user-select: none;
+      border: 2px solid transparent;
     }
+
+    .brand:hover {
+      box-shadow: 0 16px 42px rgba(23, 28, 143, 0.35);
+    }
+
+    .brand-highlight {
+      border-color: var(--brand-blue);
+      box-shadow: 0 20px 55px rgba(23, 28, 143, 0.45);
+    }
+
     .brand img {
-      width: 100px;
+      width: 120px;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 18px;
+      pointer-events: none;
     }
+
     .brand button {
-      background: var(--brand-blue);
+      background-color: var(--brand-blue);
       color: white;
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 10px;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin-top: 10px;
       cursor: pointer;
+      box-shadow: 0 7px 18px rgba(23, 28, 143, 0.4);
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+    }
+
+    .brand button:hover,
+    .brand button:focus {
+      background-color: var(--dark-blue);
+      outline: none;
+      transform: scale(1.1);
+    }
+
+    /* Form container */
+    .form-container {
+      flex: 1;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 26px 30px 36px;
+    }
+
+    .form-container h3 {
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: var(--brand-blue);
+      font-size: 1.6rem;
+    }
+
+    .form-container p {
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--dark-blue);
+      font-size: 1.1rem;
+    }
+
+    /* Responsive scaling for mobile */
+    @media (max-width: 767px) {
+      .question {
+        padding: 60px 40px 50px;
+        border-radius: 20px;
+        box-shadow: 0 14px 40px rgba(23, 28, 143, 0.2);
+      }
+
+      .start-screen h1 {
+        font-size: 2.3rem;
+      }
+
+      .start-screen p {
+        font-size: 1rem;
+      }
+
+      .start-screen img {
+        width: 240px;
+      }
+
+      .start-screen button {
+        padding: 14px 40px;
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="start-screen active" id="start-screen">
-      <img src="assets/intro-placeholder.jpg" alt="Intro Image">
+      <img src="assets/intro-placeholder.jpg" alt="Intro Image" />
       <h1>Find Your Perfect Sheep Tag Match!</h1>
       <p>Answer 5 quick questions to discover which brand suits you best.</p>
       <button id="start-button">Start Quiz</button>
@@ -203,9 +508,17 @@
     const scores = { Rubba: 0, TagFaster: 0, 'Z Tags': 0 };
     const answersSelected = [];
 
-    let supabaseClient; // Declare globally but assign later
+    let supabaseClient;
 
     const quizContainer = document.getElementById('quiz-container');
+
+    function updateProgressBar() {
+      const progressBar = document.querySelector('.progress-bar');
+      if (progressBar) {
+        const percent = ((currentQuestion) / questions.length) * 100;
+        progressBar.style.width = percent + '%';
+      }
+    }
 
     function startQuiz() {
       document.getElementById('start-screen').style.display = 'none';
@@ -215,13 +528,25 @@
 
     function showQuestion() {
       const q = questions[currentQuestion];
-      quizContainer.innerHTML = `<div class='question active'><h2>${q.text}</h2><div class='question-card'></div></div>`;
+
+      quizContainer.innerHTML = `
+        <div class="progress-bar-container" aria-label="Quiz progress bar">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${currentQuestion}"></div>
+        </div>
+        <div class='question active'>
+          <div class="question-text">${q.text}</div>
+          <div class='question-card answers'></div>
+        </div>
+      `;
+
       q.answers.forEach((a) => {
         const btn = document.createElement('button');
         btn.innerText = a.text;
         btn.onclick = () => selectAnswer(a.brand, a.text);
-        quizContainer.querySelector('.question-card').appendChild(btn);
+        quizContainer.querySelector('.answers').appendChild(btn);
       });
+
+      updateProgressBar();
     }
 
     function selectAnswer(brand, answerText) {
@@ -236,7 +561,7 @@
     }
 
     function finishQuiz() {
-      document.getElementById('quiz-container').innerHTML = '';
+        quizContainer.classList.remove('active');
       document.getElementById('result').classList.add('active');
 
       const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
@@ -244,9 +569,8 @@
       const resultHTML = ['Rubba', 'TagFaster', 'Z Tags'].map(b => `
         <div class="brand ${b === winner ? 'brand-highlight' : ''}">
           <h3>${b}</h3>
-          <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo">
-          <br>
-          <a href="https://yourwebsite.com/${b.toLowerCase()}" target="_blank">
+          <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo" />
+          <a href="https://yourwebsite.com/${b.toLowerCase()}" target="_blank" rel="noopener noreferrer">
             <button>View ${b} Products</button>
           </a>
         </div>
@@ -275,7 +599,6 @@
       }
     }
 
-    // ✅ Ensure Supabase is created after DOM and scripts load
     document.addEventListener("DOMContentLoaded", () => {
       supabaseClient = window.supabase.createClient(
         "https://nygchaujottukyblncgu.supabase.co",
@@ -287,5 +610,6 @@
   </script>
 </body>
 </html>
+
 
 
