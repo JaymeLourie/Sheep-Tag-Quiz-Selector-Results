@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find Your Perfect Tag Brand</title>
+  <style>
+    :root {
+      --brand-yellow: #fce300;
+      --brand-blue: #171c8f;
+      --light-grey: #f8f9fa;
+      --medium-grey: #b0b5c1;
+      --dark-blue: #0f1266;
+      --transition-speed: 0.3s;
+      --border-radius: 12px;
+      --shadow-light: 0 4px 8px rgba(23, 28, 143, 0.1);
+      --shadow-strong: 0 10px 25px rgba(23, 28, 143, 0.2);
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+ margin: 0; padding: 0;
+      font-family: var(--font-family);
+      color: var(--brand-blue);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+        background-color: var(--brand-yellow);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Start Screen with full viewport background image */
+.start-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  padding: 0 20px;
+
+  background: url('assets/background.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+  /* Ensure start screen covers everything */
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1000;
+}
+
+.start-screen::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(252, 227, 0, 0.8); /* brand yellow with 40% opacity */
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.start-screen > * {
+  position: relative;
+  z-index: 2;
+}
+
+.start-screen img {
+  width: 280px;
+  border-radius: var(--border-radius);
+  margin-bottom: 32px;
+}
+
+.start-screen img:hover {
+  transform: scale(1.06);
+}
+
+.start-screen h1 {
+  font-size: 3.8rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+  color: var(--brand-blue);
+  /* Optional: remove or tweak text-shadow for better readability */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+.start-screen p {
+  font-size: 2rem;
+  font-weight: 600;
+  max-width: 530px;
+  margin-bottom: 36px;
+  color: var(--brand-blue);
+  /* Optional: remove or tweak text-shadow */
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.start-screen button {
+  background-color: var(--brand-blue);
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 18px 48px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(23, 28, 143, 0.35);
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.start-screen button:hover,
+.start-screen button:focus {
+  background-color: var(--dark-blue);
+  outline: none;
+  transform: scale(1.07);
+}
+
+/* Hide start screen when inactive */
+.start-screen.hidden {
+  display: none;
+}
+
+/* ===== Mobile styles for smaller screens ===== */
+@media (max-width: 600px) {
+  .start-screen h1 {
+    font-size: 5rem; /* Bigger font size on mobile */
+    line-height: 1.2;
+    padding: 0 10px;
+  }
+
+  .start-screen p {
+    font-size: 2.5rem; /* Bigger paragraph text */
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .start-screen button {
+    font-size: 2.3rem;
+    padding: 20px 40px;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .start-screen img {
+    width: 200px;
+  }
+}
+
+
+    /* Quiz container */
+    #quiz-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 100px);
+      padding: 60px 24px 40px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #quiz-container.active {
+      display: flex;
+    }
+
+    /* Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--light-grey);
+      border-radius: var(--border-radius);
+      height: 14px;
+      overflow: hidden;
+      margin-bottom: 36px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--brand-blue);
+      width: 0%;
+      transition: width 0.5s ease;
+      border-radius: var(--border-radius);
+    }
+
+    /* Question card */
+    .question {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 36px 36px 40px;
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Question text */
+    .question-text {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--brand-blue);
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+ /* Question background */
+.question-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.85);
+   transition: opacity 1.5s ease;
+  opacity: 1;
+  z-index: 0;
+}
+
+
+
+
+    /* Answers container */
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+    }
+
+    /* Answer buttons */
+    .question button {
+      background: var(--light-grey);
+      border: 2.5px solid transparent;
+      border-radius: var(--border-radius);
+      padding: 16px 24px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-light);
+      transition: 
+        background-color var(--transition-speed),
+        border-color var(--transition-speed),
+        box-shadow var(--transition-speed),
+        transform var(--transition-speed);
+      text-align: left;
+      color: var(--dark-blue);
+      display: block;
+      width: 100%;
+      min-height: 56px;
+    }
+
+    /* Remove default focus outline and add custom focus */
+    .question button:focus-visible {
+      outline: 3px solid var(--brand-yellow);
+      outline-offset: 3px;
+    }
+
+    /* Hover and focus states */
+    .question button:hover {
+      background: #fffbe6;
+      border-color: var(--brand-yellow);
+      box-shadow: 0 6px 18px rgba(252, 227, 0, 0.4);
+      transform: scale(1.03);
+    }
+
+    /* Selected answer style */
+    .question button.selected {
+      background: var(--brand-yellow);
+      border-color: var(--dark-blue);
+      color: var(--dark-blue);
+      box-shadow: 0 8px 25px rgba(23, 28, 143, 0.35);
+      cursor: default;
+      transform: none;
+    }
+
+    /* Disable pointer events on selected */
+    .question button.selected:hover {
+      background: var(--brand-yellow);
+      border-color: var(--dark-blue);
+      box-shadow: 0 8px 25px rgba(23, 28, 143, 0.35);
+      transform: none;
+      cursor: default;
+    }
+
+    /* Results */
+.result {
+  display: none; /* Hides results initially */
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  top: 0;
+}
+
+
+
+    .result.active {
+      display: flex;
+
+    }
+
+body.results-bg {
+  background-image: url('assets/results-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: none !important;
+}
+
+body.results-bg .question-background {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+
+
+    .result h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 36px;
+      color: var(--brand-blue);
+      letter-spacing: 1.1px;
+    }
+
+    /* Layout for result brands and form */
+    .result-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    @media(min-width: 768px) {
+      .result-layout {
+        flex-direction: row;
+      }
+    }
+
+    .brand-results {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .brand {
+      background: white;
+font-size: 1.5rem;               /* Bigger brand name */
+  font-weight: 900;
+  color: var(--brand-blue); 
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 26px 22px 32px;
+      text-align: center;
+      transition: box-shadow var(--transition-speed);
+      user-select: none;
+      border: 2px solid transparent;
+    }
+
+    .brand:hover {
+      box-shadow: 0 16px 42px rgba(23, 28, 143, 0.35);
+    }
+
+.brand-highlight {
+  background-color: White; 
+  color: var(--brand-blue) !important;
+  border-radius: 8px; /* Optional: soften corners */
+  padding: 15px; /* Optional: add some padding */
+  box-shadow: 0 0 20px rgba(23, 28, 143, 0.8); /* Optional: subtle glow */
+}
+
+
+
+
+
+ .brand img {
+  max-width: 120px;
+  max-height: 90px;
+  width: auto;
+  height: auto;
+  margin-bottom: 18px;
+  pointer-events: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+    .brand button {
+      background-color: var(--brand-blue);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 7px 18px rgba(23, 28, 143, 0.4);
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+    }
+
+    .brand button:hover,
+    .brand button:focus {
+      background-color: var(--dark-blue);
+      outline: none;
+      transform: scale(1.1);
+    }
+
+.winner-badge {
+  background: var(--brand-yellow);
+  color: var(--brand-blue);  /* Winner text brand blue */
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 6px 16px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(23, 28, 143, 0.15);
+  user-select: none;
+  letter-spacing: 1.1px;
+}
+
+.brand-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.brand-name-wrapper h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--brand-blue);
+  margin: 0;
+}
+
+.winner-badge-inline {
+  background-color: var(--brand-yellow);
+  color: var(--brand-blue);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+
+
+
+    /* Form container */
+    .form-container {
+      flex: 1;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-strong);
+      padding: 26px 30px 36px;
+    }
+
+    .form-container h3 {
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: var(--brand-blue);
+      font-size: 1.6rem;
+    }
+
+    .form-container p {
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--dark-blue);
+      font-size: 1.1rem;
+    }
+
+    /* Responsive scaling for mobile */
+    @media (max-width: 767px) {
+      .question {
+        padding: 60px 40px 50px;
+        border-radius: 20px;
+        box-shadow: 0 14px 40px rgba(23, 28, 143, 0.2);
+      }
+
+      .start-screen h1 {
+        font-size: 2.3rem;
+      }
+
+      .start-screen p {
+        font-size: 1rem;
+      }
+
+      .start-screen img {
+        width: 240px;
+      }
+
+      .start-screen button {
+        padding: 14px 40px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="question-background"></div>
+  <div class="container">
+    <div class="start-screen active" id="start-screen">
+      <img src="assets/intro-placeholder.png" alt="Intro Image" />
+      <h1>Find Your Perfect Sheep Tag Match!</h1>
+      <p>Answer 5 quick questions to discover which brand suits you best.</p>
+      <button id="start-button">Start Quiz</button>
+    </div>
+
+    <div id="quiz-container"></div>
+
+
+
+    <div class="result" id="result">
+      <h2>Your Perfect Match:</h2>
+      <div class="result-layout">
+        <div class="brand-results" id="brand-results"></div>
+        <div class="form-container">
+          <h3>Want to try before you buy?</h3>
+          <p>Fill out the form below to receive a FREE sample pack!</p>
+          <iframe src="https://offers.datamars.co.uk/l/978583/2023-04-03/qfkqr" width="100%" height="500" type="text/html" frameborder="0" allowTransparency="true" style="border: 0"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<audio id="answer-sound" src="assets/answersound.wav" preload="auto"></audio>
+<audio id="reveal-sound" src="assets/reveal.wav" preload="auto"></audio>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const questions = [
+      {
+        text: "How much does the applicator matter to you?",
+        answers: [
+          { brand: "Rubba", text: "I'm not so fussy about the applicator, a standard manual pair of pliers are fine." },
+          { brand: "TagFaster", text: "I love trying new things and new technology, having an automatic applicator would be a great benefit to me." },
+          { brand: "Z Tags", text: "I'm looking for a stress free, tear prevention applicator." }
+        ]
+      },
+      {
+        text: "Does the size of your sheep tags matter to you?",
+        answers: [
+          { brand: "Rubba", text: "Yes! I like to have shape options (button, flag, loop) and a nice large print area." },
+          { brand: "TagFaster", text: "I prefer more discreet tags, which are small and lightweight." },
+          { brand: "Z Tags", text: "I like a more traditional loop shaped tag, they have always worked for me!" }
+        ]
+      },
+      {
+        text: "When do you normally tag your lambs?",
+        answers: [
+          { brand: "Rubba", text: "I tag my breeding ewes after fly season, with my breeding pairs." },
+          { brand: "TagFaster", text: "I like to quickly tag all my animals before they go to market, and normally all at once!" },
+          { brand: "Z Tags", text: "I like to tag my new arrivals from birth!" }
+        ]
+      },
+      {
+        text: "How important is the speed at which you tag?",
+        answers: [
+          { brand: "Rubba", text: "I only have a few ears to tag." },
+          { brand: "TagFaster", text: "Very Important! I have a large flock to tag and need to get the job done quick." },
+          { brand: "Z Tags", text: "Somewhat Important." }
+        ]
+      },
+      {
+        text: "What benefit would be most valuable to you?",
+        answers: [
+          { brand: "Rubba", text: "A Large colour range" },
+          { brand: "TagFaster", text: "Pre organised strips of pairs with yellow and coloured twin tags on a strip together." },
+          { brand: "Z Tags", text: "Competitive Pricing" }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    const scores = { Rubba: 0, TagFaster: 0, 'Z Tags': 0 };
+    const answersSelected = [];
+
+    let supabaseClient;
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    function updateProgressBar() {
+      const progressBar = document.querySelector('.progress-bar');
+      if (progressBar) {
+        const percent = ((currentQuestion) / questions.length) * 100;
+        progressBar.style.width = percent + '%';
+      }
+    }
+
+    function startQuiz() {
+      document.getElementById('start-screen').style.display = 'none';
+      quizContainer.classList.add('active');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+
+// Define an array of background images for each question (make sure to put your real image paths here)
+const questionBackgrounds = [
+  'assets/bg-question1.jpg',
+  'assets/bg-question2.jpg',
+  'assets/bg-question3.jpg',
+  'assets/bg-question4.jpg',
+  'assets/bg-question5.jpg'
+];
+
+const bgDiv = document.querySelector('.question-background');
+
+function fadeBackgroundTo(imageUrl) {
+  // If we're on the results page, don't fade out
+  if (document.getElementById('result').classList.contains('active')) {
+    bgDiv.style.backgroundImage = `url('${imageUrl}')`;
+    bgDiv.style.opacity = 1;
+    return;
+  }
+
+  bgDiv.style.opacity = 0;
+
+  setTimeout(() => {
+    bgDiv.style.backgroundImage = `url('${imageUrl}')`;
+    bgDiv.style.opacity = 1;
+  }, 800);
+}
+
+
+  // Update question content only (remove background from innerHTML)
+  quizContainer.innerHTML = `
+    <div class="progress-bar-container" aria-label="Quiz progress bar" style="position: relative; z-index: 2;">
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${currentQuestion}"></div>
+    </div>
+    <div class='question active' style="position: relative; z-index: 2;">
+      <div class="question-text">${q.text}</div>
+      <div class='question-card answers'></div>
+    </div>
+  `;
+
+  // Fade the background image to new question's image
+  fadeBackgroundTo(questionBackgrounds[currentQuestion]);
+
+  q.answers.forEach((a) => {
+    const btn = document.createElement('button');
+    btn.innerText = a.text;
+    btn.onclick = () => selectAnswer(a.brand, a.text);
+    quizContainer.querySelector('.answers').appendChild(btn);
+  });
+
+  updateProgressBar();
+}
+
+function selectAnswer(brand, answerText) {
+  // Play answer sound
+  const answerSound = document.getElementById('answer-sound');
+  if (answerSound) {
+    answerSound.currentTime = 0; // rewind to start
+    answerSound.play();
+  }
+
+  scores[brand]++;
+  answersSelected.push(answerText);
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    showQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  // Play reveal sound
+  const revealSound = document.getElementById('reveal-sound');
+  if (revealSound) {
+    revealSound.currentTime = 0;
+    revealSound.play();
+  }
+
+  // Switch screens
+  quizContainer.classList.remove('active');
+  document.getElementById('result').classList.add('active');
+
+  // ✅ NEW: Set body background class for results
+  document.body.classList.remove('start-bg', 'question-bg'); // Remove other background classes if you use them
+  document.body.classList.add('results-bg');
+
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+
+const brands = ['Rubba', 'TagFaster', 'Z Tags'];
+
+// Winner first, then others
+const orderedBrands = [winner, ...brands.filter(b => b !== winner)];
+
+const brandLinks = {
+  'Z Tags': 'https://www.shopdatamars.co.uk/product/zsheep-single-eid-slaughter-tags/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID',
+  'TagFaster': 'https://www.shopdatamars.co.uk/product/tagfaster-eid-single-slaughter-tag/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID',
+  'Rubba': 'https://www.shopdatamars.co.uk/product/rubba-single-eid-slaughter-tags/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID'
+};
+
+const resultHTML = orderedBrands.map(b => {
+  const isWinner = b === winner;
+  const productLink = brandLinks[b];
+
+  return `
+    <div class="brand ${isWinner ? 'brand-highlight' : ''}">
+      <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo" />
+      <div class="brand-name-wrapper">
+        ${isWinner ? '<span class="winner-badge-inline">Your Match!</span>' : ''}
+        <h3>${b}</h3>
+      </div>
+      <a href="${productLink}" target="_blank" rel="noopener noreferrer">
+        <button>Buy ${b} Tags</button>
+      </a>
+    </div>
+  `;
+}).join('');
+
+
+
+
+  document.getElementById('brand-results').innerHTML = resultHTML;
+  logResultsToSupabase(winner);
+}
+
+
+    async function logResultsToSupabase(winner) {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        answer1: answersSelected[0],
+        answer2: answersSelected[1],
+        answer3: answersSelected[2],
+        answer4: answersSelected[3],
+        answer5: answersSelected[4],
+        winner: winner
+      };
+
+      const { data, error } = await supabaseClient.from('quiz_results').insert([payload]);
+      if (error) {
+        console.error('Supabase Error:', error);
+      } else {
+        console.log('Logged to Supabase:', data);
+      }
+    }
+
+    // ✅ Ensure Supabase is created after DOM and scripts load
+    document.addEventListener("DOMContentLoaded", () => {
+      supabaseClient = window.supabase.createClient(
+        "https://nygchaujottukyblncgu.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Z2NoYXVqb3R0dWt5YmxuY2d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwNTY0NjYsImV4cCI6MjA2MjYzMjQ2Nn0.baKzk7DBS7ffRbuEddaRTnT_W54F_IPeXzeQrM71ixk"
+      );
+
+      document.getElementById("start-button").addEventListener("click", startQuiz);
+    });
+  </script>
+</body>
+</html>
