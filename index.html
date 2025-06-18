@@ -23,7 +23,7 @@
     }
 
     html, body {
-      margin: 0; padding: 0;
+ margin: 0; padding: 0;
       font-family: var(--font-family);
       color: var(--brand-blue);
       -webkit-font-smoothing: antialiased;
@@ -31,7 +31,7 @@
       overflow-x: hidden;
       height: 100%;
       width: 100%;
-      background: var(--light-grey);
+        background-color: var(--brand-yellow);
     }
 
     .container {
@@ -73,10 +73,11 @@
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.15);
+  background: rgba(252, 227, 0, 0.8); /* brand yellow with 40% opacity */
   pointer-events: none;
   z-index: 1;
 }
+
 
 .start-screen > * {
   position: relative;
@@ -86,8 +87,6 @@
 .start-screen img {
   width: 280px;
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-strong);
-  transition: transform var(--transition-speed);
   margin-bottom: 32px;
 }
 
@@ -100,8 +99,9 @@
   font-weight: 900;
   letter-spacing: 1.2px;
   margin-bottom: 16px;
-  color: white;
-  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+  color: var(--brand-blue);
+  /* Optional: remove or tweak text-shadow for better readability */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 }
 
 .start-screen p {
@@ -109,8 +109,9 @@
   font-weight: 600;
   max-width: 530px;
   margin-bottom: 36px;
-  color: white;
-  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+  color: var(--brand-blue);
+  /* Optional: remove or tweak text-shadow */
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
 }
 
 .start-screen button {
@@ -228,6 +229,23 @@
       margin: 0 auto;
     }
 
+ /* Question background */
+.question-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.85);
+   transition: opacity 1.5s ease;
+  opacity: 1;
+  z-index: 0;
+}
+
+
+
+
     /* Answers container */
     .answers {
       display: flex;
@@ -307,7 +325,23 @@
 
     .result.active {
       display: flex;
+
     }
+
+body.results-bg {
+  background-image: url('assets/results-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: none !important;
+}
+
+body.results-bg .question-background {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+
 
     .result h2 {
       font-size: 2.5rem;
@@ -340,6 +374,9 @@
 
     .brand {
       background: white;
+font-size: 1.5rem;               /* Bigger brand name */
+  font-weight: 900;
+  color: var(--brand-blue); 
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-strong);
       padding: 26px 22px 32px;
@@ -353,17 +390,30 @@
       box-shadow: 0 16px 42px rgba(23, 28, 143, 0.35);
     }
 
-    .brand-highlight {
-      border-color: var(--brand-blue);
-      box-shadow: 0 20px 55px rgba(23, 28, 143, 0.45);
-    }
+.brand-highlight {
+  background-color: White; 
+  color: var(--brand-blue) !important;
+  border-radius: 8px; /* Optional: soften corners */
+  padding: 15px; /* Optional: add some padding */
+  box-shadow: 0 0 20px rgba(23, 28, 143, 0.8); /* Optional: subtle glow */
+}
 
-    .brand img {
-      width: 120px;
-      height: auto;
-      margin-bottom: 18px;
-      pointer-events: none;
-    }
+
+
+
+
+ .brand img {
+  max-width: 120px;
+  max-height: 90px;
+  width: auto;
+  height: auto;
+  margin-bottom: 18px;
+  pointer-events: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
     .brand button {
       background-color: var(--brand-blue);
@@ -384,6 +434,48 @@
       outline: none;
       transform: scale(1.1);
     }
+
+.winner-badge {
+  background: var(--brand-yellow);
+  color: var(--brand-blue);  /* Winner text brand blue */
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 6px 16px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(23, 28, 143, 0.15);
+  user-select: none;
+  letter-spacing: 1.1px;
+}
+
+.brand-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.brand-name-wrapper h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--brand-blue);
+  margin: 0;
+}
+
+.winner-badge-inline {
+  background-color: var(--brand-yellow);
+  color: var(--brand-blue);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+
+
 
     /* Form container */
     .form-container {
@@ -436,15 +528,18 @@
   </style>
 </head>
 <body>
+<div class="question-background"></div>
   <div class="container">
     <div class="start-screen active" id="start-screen">
-      <img src="assets/intro-placeholder.jpg" alt="Intro Image" />
+      <img src="assets/intro-placeholder.png" alt="Intro Image" />
       <h1>Find Your Perfect Sheep Tag Match!</h1>
       <p>Answer 5 quick questions to discover which brand suits you best.</p>
       <button id="start-button">Start Quiz</button>
     </div>
 
     <div id="quiz-container"></div>
+
+
 
     <div class="result" id="result">
       <h2>Your Perfect Match:</h2>
@@ -453,11 +548,15 @@
         <div class="form-container">
           <h3>Want to try before you buy?</h3>
           <p>Fill out the form below to receive a FREE sample pack!</p>
-          <iframe src="https://your.salesforce.form.url" width="100%" height="500" style="border:none;"></iframe>
+          <iframe src="https://offers.datamars.co.uk/l/978583/2023-04-03/qfkqr" width="100%" height="500" type="text/html" frameborder="0" allowTransparency="true" style="border: 0"></iframe>
         </div>
       </div>
     </div>
   </div>
+
+<audio id="answer-sound" src="assets/answersound.wav" preload="auto"></audio>
+<audio id="reveal-sound" src="assets/reveal.wav" preload="auto"></audio>
+
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
@@ -529,56 +628,130 @@
     function showQuestion() {
       const q = questions[currentQuestion];
 
-      quizContainer.innerHTML = `
-        <div class="progress-bar-container" aria-label="Quiz progress bar">
-          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${currentQuestion}"></div>
-        </div>
-        <div class='question active'>
-          <div class="question-text">${q.text}</div>
-          <div class='question-card answers'></div>
-        </div>
-      `;
+// Define an array of background images for each question (make sure to put your real image paths here)
+const questionBackgrounds = [
+  'assets/bg-question1.jpg',
+  'assets/bg-question2.jpg',
+  'assets/bg-question3.jpg',
+  'assets/bg-question4.jpg',
+  'assets/bg-question5.jpg'
+];
 
-      q.answers.forEach((a) => {
-        const btn = document.createElement('button');
-        btn.innerText = a.text;
-        btn.onclick = () => selectAnswer(a.brand, a.text);
-        quizContainer.querySelector('.answers').appendChild(btn);
-      });
+const bgDiv = document.querySelector('.question-background');
 
-      updateProgressBar();
-    }
+function fadeBackgroundTo(imageUrl) {
+  // If we're on the results page, don't fade out
+  if (document.getElementById('result').classList.contains('active')) {
+    bgDiv.style.backgroundImage = `url('${imageUrl}')`;
+    bgDiv.style.opacity = 1;
+    return;
+  }
 
-    function selectAnswer(brand, answerText) {
-      scores[brand]++;
-      answersSelected.push(answerText);
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      } else {
-        finishQuiz();
-      }
-    }
+  bgDiv.style.opacity = 0;
 
-    function finishQuiz() {
-        quizContainer.classList.remove('active');
-      document.getElementById('result').classList.add('active');
+  setTimeout(() => {
+    bgDiv.style.backgroundImage = `url('${imageUrl}')`;
+    bgDiv.style.opacity = 1;
+  }, 800);
+}
 
-      const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
 
-      const resultHTML = ['Rubba', 'TagFaster', 'Z Tags'].map(b => `
-        <div class="brand ${b === winner ? 'brand-highlight' : ''}">
-          <h3>${b}</h3>
-          <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo" />
-          <a href="https://yourwebsite.com/${b.toLowerCase()}" target="_blank" rel="noopener noreferrer">
-            <button>View ${b} Products</button>
-          </a>
-        </div>
-      `).join('');
+  // Update question content only (remove background from innerHTML)
+  quizContainer.innerHTML = `
+    <div class="progress-bar-container" aria-label="Quiz progress bar" style="position: relative; z-index: 2;">
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${currentQuestion}"></div>
+    </div>
+    <div class='question active' style="position: relative; z-index: 2;">
+      <div class="question-text">${q.text}</div>
+      <div class='question-card answers'></div>
+    </div>
+  `;
 
-      document.getElementById('brand-results').innerHTML = resultHTML;
-      logResultsToSupabase(winner);
-    }
+  // Fade the background image to new question's image
+  fadeBackgroundTo(questionBackgrounds[currentQuestion]);
+
+  q.answers.forEach((a) => {
+    const btn = document.createElement('button');
+    btn.innerText = a.text;
+    btn.onclick = () => selectAnswer(a.brand, a.text);
+    quizContainer.querySelector('.answers').appendChild(btn);
+  });
+
+  updateProgressBar();
+}
+
+function selectAnswer(brand, answerText) {
+  // Play answer sound
+  const answerSound = document.getElementById('answer-sound');
+  if (answerSound) {
+    answerSound.currentTime = 0; // rewind to start
+    answerSound.play();
+  }
+
+  scores[brand]++;
+  answersSelected.push(answerText);
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    showQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  // Play reveal sound
+  const revealSound = document.getElementById('reveal-sound');
+  if (revealSound) {
+    revealSound.currentTime = 0;
+    revealSound.play();
+  }
+
+  // Switch screens
+  quizContainer.classList.remove('active');
+  document.getElementById('result').classList.add('active');
+
+  // ✅ NEW: Set body background class for results
+  document.body.classList.remove('start-bg', 'question-bg'); // Remove other background classes if you use them
+  document.body.classList.add('results-bg');
+
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+
+const brands = ['Rubba', 'TagFaster', 'Z Tags'];
+
+// Winner first, then others
+const orderedBrands = [winner, ...brands.filter(b => b !== winner)];
+
+const brandLinks = {
+  'Z Tags': 'https://www.shopdatamars.co.uk/product/zsheep-single-eid-slaughter-tags/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID',
+  'TagFaster': 'https://www.shopdatamars.co.uk/product/tagfaster-eid-single-slaughter-tag/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID',
+  'Rubba': 'https://www.shopdatamars.co.uk/product/rubba-single-eid-slaughter-tags/?utm_source=Tag+Config&utm_medium=Website&utm_campaign=LID'
+};
+
+const resultHTML = orderedBrands.map(b => {
+  const isWinner = b === winner;
+  const productLink = brandLinks[b];
+
+  return `
+    <div class="brand ${isWinner ? 'brand-highlight' : ''}">
+      <img src="assets/${b.toLowerCase()}-logo.png" alt="${b} Logo" />
+      <div class="brand-name-wrapper">
+        ${isWinner ? '<span class="winner-badge-inline">Your Match!</span>' : ''}
+        <h3>${b}</h3>
+      </div>
+      <a href="${productLink}" target="_blank" rel="noopener noreferrer">
+        <button>Buy ${b} Tags</button>
+      </a>
+    </div>
+  `;
+}).join('');
+
+
+
+
+  document.getElementById('brand-results').innerHTML = resultHTML;
+  logResultsToSupabase(winner);
+}
+
 
     async function logResultsToSupabase(winner) {
       const payload = {
